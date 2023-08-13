@@ -11,9 +11,14 @@ conn = sqlConnect(db_path)
 #Instantiate cursor
 db_cursor = conn.cursor()
 
-db_cursor.execute("""SELECT * FROM Product_Pricing_Data ORDER BY COALESCE(reg_price, sale_price), product_name""")
+# #Order
+db_cursor.execute("""SELECT * FROM Product_Pricing_Data ORDER BY COALESCE(reg_price, sale_price) DESC, product_name""")
 
+#Commit
 conn.commit()
+
+for i in db_cursor:
+    print(i)
 
 # db_file = "./PriceStats Technical Assessment/prod_sqlite.db"
 
@@ -22,4 +27,5 @@ conn.commit()
 
 # db_df.to_csv('database2.csv', index=False)
 
+#Close
 conn.close()

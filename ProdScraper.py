@@ -17,6 +17,7 @@ def sqlConnect(db_path):
 def create_table(conn, create_table_sql):
     try:
         c = conn.cursor()
+        c.execute("DROP TABLE IF EXISTS Product_Pricing_Data")
         c.execute(create_table_sql)
     except:
         print(f"Error cannot create table")
