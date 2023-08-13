@@ -49,9 +49,9 @@ def scrapeProducts(page):
         avialability_status = product.find('link')
         avilability = avialability_status['href'][19:]
         if avilability[0] == "I":
-            OOSI = True
+            OOSI = "True"
         else:
-            OOSI = False
+            OOSI = "False"
         #Product regular price and sales price
         prod_price = product.find('span')
         reg_price = prod_price.get('content')
@@ -96,7 +96,7 @@ def main():
     # URL the product was captured from
     sql_create_table = """CREATE TABLE IF NOT EXISTS Product_Pricing_Data (product_id interger, 
                             product_name text, product_desc text, reg_price interger, 
-                            sale_price interger, OOSI boolean, URL text);"""
+                            sale_price interger, OOSI text, URL text);"""
     
     if conn is not None:
         create_table(conn, sql_create_table)
