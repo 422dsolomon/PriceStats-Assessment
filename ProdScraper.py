@@ -24,6 +24,17 @@ def create_table(conn, create_table_sql):
         print(f"Error cannot create table")
         os.sys.exit(1)
 
+def findPageNumber(url):
+    r = requests.get(url).text
+    soup = bs(r, 'html.parser')
+    page_numbers = soup.find('ul', class_ = "page-list clearfix text-xs-center")
+    page_num = page_numbers.find_all('li')
+    total_pages = 0
+    for page in page_num:    
+        num = page.find('a', href = True)
+        total_pages = max(total_pages, int(num['href'][-1]))
+    return total_pages
+
 def scrapeProducts(page):
     website = f"https://glacial.com.uy/8-vegetales?page={page}"
     r = requests.get(website).text
@@ -67,17 +78,6 @@ def scrapeProducts(page):
         productsList.append(productList)
 
     return productsList
-
-def findPageNumber(url):
-    r = requests.get(url).text
-    soup = bs(r, 'html.parser')
-    page_numbers = soup.find('ul', class_ = "page-list clearfix text-xs-center")
-    page_num = page_numbers.find_all('li')
-    total_pages = 0
-    for page in page_num:    
-        num = page.find('a', href = True)
-        total_pages = max(total_pages, int(num['href'][-1]))
-    return total_pages
 
 def main():
     #Database Path
