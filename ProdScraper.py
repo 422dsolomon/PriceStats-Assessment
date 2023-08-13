@@ -81,6 +81,7 @@ def main():
     #Database Path
     db_path = "./PriceStats Technical Assessment/prod_sqlite.db"
 
+    #Website URL
     url = "https://glacial.com.uy/8-vegetales"
 
     #Connect to the Database 
@@ -100,10 +101,11 @@ def main():
     if conn is not None:
         create_table(conn, sql_create_table)
     
-    #WebScrape
     #Get number of pages
     total_pages = findPageNumber(url)
     totalProductsList = []
+
+    #WebScrape
     for i in range(1, total_pages+1):
         productsList = scrapeProducts(i)
         totalProductsList.append(productsList)
