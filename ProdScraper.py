@@ -42,9 +42,22 @@ def scrapeProducts(page):
 
     return productsList
 
+def findPageNumber(url):
+    r = requests.get(url).text
+    soup = bs(r, 'html.parser')
+    page_numbers = soup.find('ul', class_ = "page-list clearfix text-xs-center")
+    page_num = page_numbers.find_all('li')
+    total_pages = 0
+    for page in page_num:    
+        num = page.find('a', href = True)
+        total_pages = max(total_pages, int(num['href'][-1]))
+    return total_pages
+
 def main():
     #Database Path
     db_path = "./PriceStats Technical Assessment/prod_sqlite.db"
+
+    url = "https://glacial.com.uy/8-vegetales"
 
     #Connect to the Database 
     conn = sqlConnect(db_path)
@@ -66,7 +79,11 @@ def main():
         print("Error! cannot create the database connection")
     
     #WebScrape
-    productsList = scrapeProducts(1)
+    #Get number of pages
+    total_pages = findPageNumber(url)
+
+    for i in range(1, total_pages+1):
+        productsList = scrapeProducts(1)
 
     #Insert data into SQLite
     sql = """INSERT INTO Product_Pricing_Data(product_id,product_name,product_desc,price,sale_price,OOSI,URL)
