@@ -20,12 +20,5 @@ conn.commit()
 for i in db_cursor:
     print(i)
 
-# db_file = "./PriceStats Technical Assessment/prod_sqlite.db"
-
-# conn = sqlite3.connect(db_file, detect_types=sqlite3.PARSE_COLNAMES)
-# db_df = pd.read_sql_query("SELECT * FROM Product_Pricing_Data", conn)
-
-# db_df.to_csv('database2.csv', index=False)
-
 #Close
 conn.close()
