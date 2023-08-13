@@ -66,8 +66,15 @@ def main():
         print("Error! cannot create the database connection")
     
     #WebScrape
-    scrapeProducts(1)
+    productsList = scrapeProducts(1)
 
+    #Insert data into SQLite
+    sql = """INSERT INTO Product_Pricing_Data(product_id,product_name,product_desc,price,sale_price,OOSI,URL)
+                VALUES(?,?,?,?,?,?,?)"""
+    
+    for product in productsList:
+         db_cursor.execute(sql, product)
+         conn.commit()
     
     if __name__ == "__main__":
         main()
