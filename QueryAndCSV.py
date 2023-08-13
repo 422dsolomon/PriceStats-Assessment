@@ -17,6 +17,7 @@ db_cursor.execute("""SELECT * FROM Product_Pricing_Data ORDER BY COALESCE(reg_pr
 #Commit
 conn.commit()
 
+#print out CSV
 for i in db_cursor:
     print(i)
 
