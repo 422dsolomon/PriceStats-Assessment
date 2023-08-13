@@ -83,7 +83,7 @@ def main():
     total_pages = findPageNumber(url)
 
     for i in range(1, total_pages+1):
-        productsList = scrapeProducts(1)
+        productsList = scrapeProducts(i)
 
     #Insert data into SQLite
     sql = """INSERT INTO Product_Pricing_Data(product_id,product_name,product_desc,price,sale_price,OOSI,URL)
