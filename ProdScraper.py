@@ -23,21 +23,40 @@ def create_table(conn, create_table_sql):
         os.sys.exit(1)
 
 def scrapeProducts(page):
-    url = f"https://glacial.com.uy/8-vegetales?page={page}"
-    r = requests.get(url).text
+    link = f"https://glacial.com.uy/8-vegetales?page={page}"
+    r = requests.get(link).text
     soup = bs(r, 'html.parser')
     products = soup.find_all('div', class_ = "product-container")
+    product_id = None
+    name = None
+    desc = None
+    reg_price = None
+    sales_price = None
+    OOSI = False
+    url = None
     productsList = []
     for product in products:
+        #Product name and link
         prod_name_and_link = product.find('h5', class_ = "product-title")
-        link = prod_name_and_link.find('a', href = True)
-        product_desc = product.find('div', class_ = "product-description-short")
-        prod_price = product.find('span')
         name = prod_name_and_link.text
-        price = prod_price.get('content')
-        desc = product_desc.text
+        link = prod_name_and_link.find('a', href = True)
         url = link['href']
-        productList = [None,name,desc,price,None,None,url]
+        #Product description
+        product_desc = product.find('div', class_ = "product-description-short")
+        desc = product_desc.text
+        #Out of stock index
+        avialability_status = product.find('link')
+        avilability = avialability_status['href'][19:]
+        if avilability[0] == "I":
+            OOSI = True
+        #Product regular price and sales price
+        prod_price = product.find('span')
+        reg_price = prod_price.get('content')
+        if not reg_price:
+            prod_price = product.find('span', class_ = "regular-price")
+            reg_price = prod_price.text[2:]
+            sales_price = product.find('span', class_ = 'price')
+        productList = [product_id,name,desc,reg_price,sales_price,OOSI,url]
         productsList.append(productList)
 
     return productsList
@@ -71,7 +90,7 @@ def main():
     # URL the product was captured from
     sql_create_table = """CREATE TABLE IF NOT EXISTS Product_Pricing_Data (product_id interger, 
                             product_name text, product_desc text, price interger, 
-                            sale_price interger, OOSI boolean, URL text);"""
+                            sale_price interger, OOSI (Out of Stock Index) boolean, URL text);"""
     
     if conn is not None:
         create_table(conn, sql_create_table)
