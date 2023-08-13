@@ -3,6 +3,7 @@ import pathlib
 import os
 import requests
 from bs4 import BeautifulSoup as bs
+import QueryAndCSV
 
 def sqlConnect(db_path):
     path_to_db = pathlib.Path(db_path).absolute().as_uri()
@@ -124,4 +125,5 @@ def main():
     
 if __name__ == "__main__":
     main()
+    QueryAndCSV
 
