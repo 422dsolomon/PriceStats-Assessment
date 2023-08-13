@@ -74,7 +74,9 @@ def main():
     
     for product in productsList:
          db_cursor.execute(sql, product)
-         conn.commit()
+
+    conn.commit()
+    conn.close()
     
     if __name__ == "__main__":
         main()
