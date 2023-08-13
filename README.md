@@ -21,7 +21,8 @@ Using the requests python library, to get the information in text format. Then u
 4. scrapeProducts(pages)
 The input of pages allows to traverse the different pages of the website. Again start by using the requests library and the BeautifulSoup library to parse the HTML data. Looking into the div of the class product-container gives all the information that is needed. Start looping through the information of the products. During the loop, set each table value to a default value. By inspecting the website was able to find each HTML field that had the information that was needed. Once all the information was set to a variable, created a list of the information then added that to the output list. 
 5. Main()
-Instantiating database path, URL, using sqlConnect() function to connect to the database, instantiates the cursor, sets the table columns, creates the table with create_table() function, uses findPageNumber() function to get the the total number of pages that the scrapeProducts is going to run on. Creates an argument to add data to the sqlite database, then uses sqlite.execute to insert to data. then commit the data and close the connection
+Instantiating database path, URL, using sqlConnect() function to connect to the database, instantiates the cursor, sets the table columns, creates the table with create_table() function, uses findPageNumber() function to get the the total number of pages that the scrapeProducts is going to run on. Creates an argument to add data to the sqlite database, then uses sqlite.execute to insert to data. then commit the data and close the connection. Calls QueryAndCSV to order and output csv.
 
 ### QueryAndCSV.py
-Connects to database 
+
+Connects to database, instantiates a cursor reorders sql database using ORDER keyword. Used COALESCE to use regular price unless there is a sale price. Then uses the cursur to output information. Then lastly close the connection.
