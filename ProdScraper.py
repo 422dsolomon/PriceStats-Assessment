@@ -23,19 +23,20 @@ def create_table(conn, create_table_sql):
         os.sys.exit(1)
 
 def scrapeProducts(page):
-    link = f"https://glacial.com.uy/8-vegetales?page={page}"
-    r = requests.get(link).text
+    website = f"https://glacial.com.uy/8-vegetales?page={page}"
+    r = requests.get(website).text
     soup = bs(r, 'html.parser')
     products = soup.find_all('div', class_ = "product-container")
-    product_id = None
-    name = None
-    desc = None
-    reg_price = None
-    sales_price = None
-    OOSI = False
-    url = None
     productsList = []
     for product in products:
+        #Base Information
+        product_id = None
+        name = None
+        desc = None
+        reg_price = None
+        sale_price = None
+        OOSI = None
+        url = None
         #Product name and link
         prod_name_and_link = product.find('h5', class_ = "product-title")
         name = prod_name_and_link.text
@@ -49,14 +50,18 @@ def scrapeProducts(page):
         avilability = avialability_status['href'][19:]
         if avilability[0] == "I":
             OOSI = True
+        else:
+            OOSI = False
         #Product regular price and sales price
         prod_price = product.find('span')
         reg_price = prod_price.get('content')
         if not reg_price:
             prod_price = product.find('span', class_ = "regular-price")
             reg_price = prod_price.text[2:]
-            sales_price = product.find('span', class_ = 'price')
-        productList = [product_id,name,desc,reg_price,sales_price,OOSI,url]
+            sale = product.find('span', class_ = 'price')
+            sale_price = sale.get('content')
+        #Output
+        productList = [product_id,name,desc,reg_price,sale_price,OOSI,url]
         productsList.append(productList)
 
     return productsList
@@ -89,27 +94,27 @@ def main():
     # Price, Sale price (when available), Out of stock indicator (when available), 
     # URL the product was captured from
     sql_create_table = """CREATE TABLE IF NOT EXISTS Product_Pricing_Data (product_id interger, 
-                            product_name text, product_desc text, price interger, 
-                            sale_price interger, OOSI (Out of Stock Index) boolean, URL text);"""
+                            product_name text, product_desc text, reg_price interger, 
+                            sale_price interger, OOSI boolean, URL text);"""
     
     if conn is not None:
         create_table(conn, sql_create_table)
-    else:
-        print("Error! cannot create the database connection")
     
     #WebScrape
     #Get number of pages
     total_pages = findPageNumber(url)
-
+    totalProductsList = []
     for i in range(1, total_pages+1):
         productsList = scrapeProducts(i)
+        totalProductsList.append(productsList)
 
     #Insert data into SQLite
-    sql = """INSERT INTO Product_Pricing_Data(product_id,product_name,product_desc,price,sale_price,OOSI,URL)
+    sql = """INSERT INTO Product_Pricing_Data(product_id,product_name,product_desc,reg_price,sale_price,OOSI,URL)
                 VALUES(?,?,?,?,?,?,?)"""
     
-    for product in productsList:
-         db_cursor.execute(sql, product)
+    for productPage in totalProductsList:
+        for products in productPage:
+            db_cursor.execute(sql, products)
 
     conn.commit()
     conn.close()
