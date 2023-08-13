@@ -22,6 +22,25 @@ def create_table(conn, create_table_sql):
         print(f"Error cannot create table")
         os.sys.exit(1)
 
+def scrapeProducts(page):
+    url = f"https://glacial.com.uy/8-vegetales?page={page}"
+    r = requests.get(url).text
+    soup = bs(r, 'html.parser')
+    products = soup.find_all('div', class_ = "product-container")
+    productsList = []
+    for product in products:
+        prod_name_and_link = product.find('h5', class_ = "product-title")
+        link = prod_name_and_link.find('a', href = True)
+        product_desc = product.find('div', class_ = "product-description-short")
+        prod_price = product.find('span')
+        name = prod_name_and_link.text
+        price = prod_price.get('content')
+        desc = product_desc.text
+        url = link['href']
+        productList = [None,name,desc,price,None,None,url]
+        productsList.append(productList)
+
+    return productsList
 
 def main():
     #Database Path
@@ -45,6 +64,9 @@ def main():
         create_table(conn, sql_create_table)
     else:
         print("Error! cannot create the database connection")
+    
+    #WebScrape
+    scrapeProducts(1)
 
     
     if __name__ == "__main__":
