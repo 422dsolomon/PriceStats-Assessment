@@ -44,7 +44,7 @@ def scrapeProducts(page):
 
 def main():
     #Database Path
-    db_path = "./prod_sqlite.db"
+    db_path = "./PriceStats Technical Assessment/prod_sqlite.db"
 
     #Connect to the Database 
     conn = sqlConnect(db_path)
@@ -78,6 +78,6 @@ def main():
     conn.commit()
     conn.close()
     
-    if __name__ == "__main__":
-        main()
+if __name__ == "__main__":
+    main()
 
