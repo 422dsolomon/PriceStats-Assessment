@@ -15,5 +15,7 @@ Gets the uniform resource identifier(URI) of the database file. Then using the s
 2. create_table(connection, SQL_Table)
 Creates a cursor, deletes all the table if it exists, then using a SQLite format to create a new SQLite database
 3. findPageNumber(URL)
+Using the requests python library, to get the information in text format. Then using BeautifulSoup python library to parse the HTML data. Using BeatifulSoup to find the number of pages. Get the total number of pages then returns that to be used to loop through the scrapeProducts function for all the pages
+4. scrapeProducts(pages)
 
-4. 
+5. 
