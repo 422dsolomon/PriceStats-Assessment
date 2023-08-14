@@ -2,13 +2,13 @@
 
 Once downloaded files in terminal go into the folder with the files
 
-## Download dependencies
+## Download Dependencies
 Run: pip install -r requirements.txt
 
 ## Run Script
 Run: python ProdScraper.py
 
-## How the code works
+## How The Code Works
 
 ### ProdScraper.py
 
