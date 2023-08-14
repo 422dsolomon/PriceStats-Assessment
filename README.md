@@ -19,7 +19,8 @@ Creates a cursor, deletes all the table if it exists, then using a SQLite format
 3. findPageNumber(URL)
 Using the requests python library, to get the information in text format. Then using BeautifulSoup python library to parse the HTML data. Using BeatifulSoup to find the number of pages. Get the total number of pages then returns that to be used to loop through the scrapeProducts function for all the pages
 4. scrapeProducts(pages)
-The input of pages allows to traverse the different pages of the website. Again start by using the requests library and the BeautifulSoup library to parse the HTML data. Looking into the div of the class product-container gives all the information that is needed. Start looping through the information of the products. During the loop, set each table value to a default value. By inspecting the website was able to find each HTML field that had the information that was needed. Once all the information was set to a variable, created a list of the information then added that to the output list. 
+The input of pages allows to traverse the different pages of the website. Again start by using the requests library and the BeautifulSoup library to parse the HTML data. Looking into the div of the class product-container gives all the information that is needed. Start looping through the information of the products. During the loop, set each table value to a default value. By inspecting the website was able to find each HTML field that had the information that was needed. Once all the information was set to a variable, created a list of the information then added that to the output list.
+
 5.OrderAndCSV()
 Connects to database, instantiates a cursor reorders sql database using ORDER keyword. Used COALESCE to use regular price unless there is a sale price. Then uses the cursur to output information.
 6. Main()
