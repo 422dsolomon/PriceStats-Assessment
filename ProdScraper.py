@@ -120,7 +120,6 @@ def main():
                             sale_price interger, OOSI text, URL text);"""
     
     if conn is not None:
-        print('money')
         create_table(conn, sql_create_table)
     
     #Get number of pages
