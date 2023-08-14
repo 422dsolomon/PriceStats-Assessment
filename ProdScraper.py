@@ -81,7 +81,7 @@ def scrapeProducts(page):
 
 def main():
     #Database Path
-    db_path = "./PriceStats Technical Assessment/prod_sqlite.db"
+    db_path = "./prod_sqlite.db"
 
     #Website URL
     url = "https://glacial.com.uy/8-vegetales"
