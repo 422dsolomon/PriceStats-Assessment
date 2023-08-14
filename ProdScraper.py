@@ -3,7 +3,6 @@ import pathlib
 import os
 import requests
 from bs4 import BeautifulSoup as bs
-import QueryAndCSV
 
 def sqlConnect(db_path):
     path_to_db = pathlib.Path(db_path).absolute().as_uri()
@@ -79,6 +78,26 @@ def scrapeProducts(page):
 
     return productsList
 
+def OrderAndCSV():
+    #Database Path
+    db_path = "./prod_sqlite.db"
+
+    #Connect to database
+    conn = sqlConnect(db_path)
+
+    #Instantiate cursor
+    db_cursor = conn.cursor()
+
+    # Order
+    db_cursor.execute("""SELECT * FROM Product_Pricing_Data ORDER BY COALESCE(reg_price, sale_price) DESC, product_name""")
+
+    #Commit
+    conn.commit()
+
+    #print out CSV
+    for i in db_cursor:
+        print(i)
+
 def main():
     #Database Path
     db_path = "./prod_sqlite.db"
@@ -101,6 +120,7 @@ def main():
                             sale_price interger, OOSI text, URL text);"""
     
     if conn is not None:
+        print('money')
         create_table(conn, sql_create_table)
     
     #Get number of pages
@@ -121,9 +141,11 @@ def main():
             db_cursor.execute(sql, products)
 
     conn.commit()
+
+    OrderAndCSV()
+
     conn.close()
     
 if __name__ == "__main__":
     main()
-    QueryAndCSV
 
