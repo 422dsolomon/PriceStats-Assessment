@@ -1,4 +1,4 @@
-# PriceStats-Assessment
+# Web-Scraper
 
 Once downloaded files in terminal go into the folder with the files
 
